@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V/AIBOU Internal · Review Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{font-family:'Noto Sans JP',-apple-system,sans-serif;color:#0a0a0a;background:#fff;line-height:1.8}
+  .container{max-width:880px;margin:0 auto;padding:80px 48px 120px;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+  .meta{display:flex;justify-content:space-between;border-bottom:1px solid #0a0a0a;padding-bottom:12px;font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;margin-bottom:56px}
+  .logo{font-family:'Inter',sans-serif;font-weight:900;font-size:56px;letter-spacing:-.045em;margin-bottom:12px}
+  .tagline{font-size:16px;color:#555;margin-bottom:48px;font-weight:500}
+  .section-title{font-family:'Inter',sans-serif;font-weight:700;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#555;margin-bottom:14px}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:48px}
+  .card{border:1px solid #0a0a0a;padding:28px 28px;text-decoration:none;color:inherit;display:block;transition:all .15s;background:#fff}
+  .card:hover{background:#0a0a0a;color:#fff}
+  .card-label{font-family:'Inter',sans-serif;font-weight:700;font-size:10px;letter-spacing:.3em;color:#555;text-transform:uppercase;margin-bottom:8px}
+  .card:hover .card-label{color:#bbb}
+  .card-title{font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:22px;line-height:1.3;margin-bottom:12px}
+  .card-desc{font-size:13px;line-height:1.75;color:#444}
+  .card:hover .card-desc{color:#ccc}
+  .card-cta{margin-top:20px;font-family:'Inter',sans-serif;font-weight:700;font-size:11px;letter-spacing:.25em;text-transform:uppercase}
+  .notice{border:1px dashed #0a0a0a;background:#fffbea;padding:20px 24px;font-size:13px;line-height:1.7}
+  .notice strong{font-weight:700;letter-spacing:.05em}
+  .footer{margin-top:72px;padding-top:20px;border-top:1px solid #0a0a0a;font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.15em;color:#555;text-transform:uppercase;display:flex;justify-content:space-between}
+  @media (max-width:700px){.cards{grid-template-columns:1fr}.logo{font-size:40px}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="meta">
+  <span>VAIZO INTERNAL</span>
+  <span>2026.04.21</span>
+  <span>V/AIBOU Review</span>
+</div>
+
+<div class="logo">V-AIBOU</div>
+<p class="tagline">経営者の相棒であり、経営のバイブル。</p>
+
+<div class="section-title">— Documents</div>
+<div class="cards">
+
+  <a class="card" href="./org-design.html">
+    <div class="card-label">Org Design</div>
+    <div class="card-title">V/AIBOU 組織設計</div>
+    <div class="card-desc">
+      人を先に雇わず、売上に合わせて組織を増やす。段階スケーリング（Phase 1→1.5→2→3）とドッグフーディング戦略で最悪シナリオも生存可能な設計。
+    </div>
+    <div class="card-cta">開く →</div>
+  </a>
+
+  <a class="card" href="./budget-v8.html">
+    <div class="card-label">Budget v8</div>
+    <div class="card-title">1期目予算計画 v8</div>
+    <div class="card-desc">
+      V/AIBOU 料金v8統合・段階スケーリング・借入500万実行前提。3シナリオ（最悪／基準／計画通り）で並行試算し、Phase移行ゲートを定量化。
+    </div>
+    <div class="card-cta">開く →</div>
+  </a>
+
+</div>
+
+<div class="notice">
+  <strong>閲覧方法：</strong>各ドキュメントはパスワードで保護されています。カードをクリックして、共有されたパスワードを入力してください。
+</div>
+
+<div class="footer">
+  <span>vaibou.com / vaizo.co.jp</span>
+  <span>VAIZO Editorial Style</span>
+  <span>CEO Secretary</span>
+</div>
+
+</div>
+</body>
+</html>
