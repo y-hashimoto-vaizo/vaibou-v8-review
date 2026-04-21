@@ -10,7 +10,7 @@
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{font-family:'Noto Sans JP',-apple-system,sans-serif;color:#0a0a0a;background:#fff;font-size:14px;line-height:1.75;letter-spacing:.01em}
-  .container{max-width:1280px;margin:0 auto;padding:64px 48px 100px}
+  .container{max-width:1480px;margin:0 auto;padding:64px 48px 100px}
   .meta{display:flex;justify-content:space-between;border-bottom:1px solid #0a0a0a;padding-bottom:12px;font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;margin-bottom:48px}
   .title-block{margin-bottom:40px}
   .eyebrow{font-family:'Inter',sans-serif;font-weight:700;font-size:11px;letter-spacing:.3em;color:#555;text-transform:uppercase;margin-bottom:16px}
@@ -29,9 +29,10 @@
   .btn.active{background:#0a0a0a;color:#fff}
 
   .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin:24px 0}
-  .panel{border:1px solid #0a0a0a;padding:28px 28px}
+  .panel{border:1px solid #0a0a0a;padding:28px 28px;overflow-x:auto}
   .panel-label{font-family:'Inter',sans-serif;font-weight:700;font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:#555;margin-bottom:4px}
-  .panel-title{font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:20px;margin-bottom:20px}
+  .panel-title{font-family:'Noto Sans JP',sans-serif;font-weight:900;font-size:20px;margin-bottom:6px}
+  .panel-hint{font-size:12px;color:#888;margin-bottom:16px}
 
   table.inputs{width:100%;border-collapse:collapse;font-size:13px}
   table.inputs th,table.inputs td{text-align:left;padding:8px 10px;border-bottom:1px solid #e5e5e5}
@@ -43,6 +44,19 @@
   input[type=number]{width:90px;padding:6px 8px;border:1px solid #0a0a0a;font-family:'Inter',sans-serif;font-weight:700;font-size:13px;text-align:right;background:#fff;outline:none}
   input[type=number]:focus{background:#fffbea}
   input[type=number]:disabled{background:#f0f0f0;color:#555}
+
+  /* Monthly matrix compact style */
+  table.monthly{width:100%;border-collapse:collapse;font-size:12px}
+  table.monthly th,table.monthly td{padding:6px 6px;border-bottom:1px solid #e5e5e5;text-align:center;vertical-align:middle}
+  table.monthly th.service{text-align:left;min-width:140px;font-family:'Noto Sans JP',sans-serif;font-size:12px;font-weight:700}
+  table.monthly th{font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#333;border-top:1px solid #0a0a0a;border-bottom:1px solid #0a0a0a;font-weight:700;padding:6px 4px}
+  table.monthly td.service{text-align:left;font-weight:700}
+  table.monthly input[type=number]{width:52px;padding:4px 4px;font-size:12px;text-align:right}
+  table.monthly td.annual{text-align:right;font-family:'Inter',sans-serif;font-weight:700;min-width:70px;border-left:1px solid #0a0a0a;background:#fafafa}
+  table.monthly th.annual{border-left:1px solid #0a0a0a;background:#f0f0f0}
+  table.monthly .section-row td{background:#f0f0f0;font-family:'Inter',sans-serif;font-weight:700;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#333;text-align:left;padding:8px 10px}
+  table.monthly .total-row td{background:#0a0a0a;color:#fff;font-weight:700;border-top:1px solid #0a0a0a;border-bottom:1px solid #0a0a0a}
+  table.monthly .unit-cell{font-size:10px;color:#888;font-weight:400}
 
   .kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:24px 0}
   .kpi{border:1px solid #0a0a0a;padding:18px 18px;transition:box-shadow .2s}
@@ -67,7 +81,7 @@
   ul,ol{padding-left:20px;margin:12px 0 18px}
   li{margin-bottom:6px;font-size:13px}
 
-  @media (max-width:960px){.grid-2{grid-template-columns:1fr}.kpi-grid{grid-template-columns:1fr 1fr}.headline{font-size:32px}}
+  @media (max-width:1200px){.grid-2{grid-template-columns:1fr}.kpi-grid{grid-template-columns:1fr 1fr}.headline{font-size:32px}}
 </style>
 </head>
 <body>
@@ -81,7 +95,7 @@
 
 <div class="title-block">
   <div class="eyebrow">VAIZO 株式会社 · 1期目予算モデル v8</div>
-  <h1 class="headline">目標数値と組織体制を<br>自由に動かしながら試算する。</h1>
+  <h1 class="headline">売上目標は月次、<br>組織は段階的に。</h1>
   <p class="sub-title">
     期首キャッシュ1,125万（資本金625万＋借入500万） ｜ 料金単価は V/AIBOU v8 固定 ｜ 青色セルを書き換えると即座に再計算されます
   </p>
@@ -101,27 +115,27 @@
 
 <!-- KPI 結果 -->
 <div class="kpi-grid">
-  <div class="kpi featured" id="k-me">
+  <div class="kpi featured">
     <div class="kpi-label">期末 月次売上</div>
     <div class="kpi-value" id="r-monthly-end">—</div>
     <div class="kpi-note" id="r-monthly-end-note">—</div>
   </div>
-  <div class="kpi" id="k-ar">
+  <div class="kpi">
     <div class="kpi-label">通期売上</div>
     <div class="kpi-value" id="r-annual-rev">—</div>
-    <div class="kpi-note">ramp考慮</div>
+    <div class="kpi-note">月次合計</div>
   </div>
-  <div class="kpi" id="k-ac">
+  <div class="kpi">
     <div class="kpi-label">通期コスト</div>
     <div class="kpi-value" id="r-annual-cost">—</div>
     <div class="kpi-note">人件費＋API＋諸経費</div>
   </div>
-  <div class="kpi" id="k-pl">
+  <div class="kpi">
     <div class="kpi-label">通期収支</div>
     <div class="kpi-value" id="r-annual-pl">—</div>
     <div class="kpi-note" id="r-annual-pl-note">—</div>
   </div>
-  <div class="kpi" id="k-ec">
+  <div class="kpi">
     <div class="kpi-label">期末キャッシュ</div>
     <div class="kpi-value" id="r-end-cash">—</div>
     <div class="kpi-note">初期1,125万＋通期収支</div>
@@ -129,93 +143,52 @@
 </div>
 
 
-<!-- 目標数値 × 組織体制 -->
+<!-- 売上目標（月次） -->
 <section class="section">
   <div class="section-num">01</div>
-  <h2 class="section-title">目標数値と組織体制</h2>
-  <div class="section-sub">Inputs · Drag numbers to model</div>
+  <h2 class="section-title">売上目標（月次）</h2>
+  <div class="section-sub">Monthly Revenue Targets</div>
+  <hr class="section-hr">
+
+  <div class="panel">
+    <div class="panel-label">Revenue Inputs (月次)</div>
+    <h3 class="panel-title">月別の契約数・件数を入力</h3>
+    <p class="panel-hint">月額サブスクは期末時点の契約数（累計）、アドオンは月次件数、他事業は月次売上（万円）を入力してください。</p>
+
+    <table class="monthly">
+      <thead>
+        <tr>
+          <th class="service">サービス<br><span class="unit-cell">単価</span></th>
+          <th>4月</th><th>5月</th><th>6月</th><th>7月</th><th>8月</th><th>9月</th>
+          <th>10月</th><th>11月</th><th>12月</th><th>1月</th><th>2月</th><th>3月</th>
+          <th class="annual">通期</th>
+        </tr>
+      </thead>
+      <tbody id="rev-matrix"></tbody>
+    </table>
+  </div>
+</section>
+
+
+<!-- 組織体制 × 経費 -->
+<section class="section">
+  <div class="section-num">02</div>
+  <h2 class="section-title">組織体制・経費</h2>
+  <div class="section-sub">Organization &amp; Expenses</div>
   <hr class="section-hr">
 
   <div class="grid-2">
 
-    <!-- 目標数値 -->
-    <div class="panel">
-      <div class="panel-label">Revenue Inputs</div>
-      <h3 class="panel-title">期末目標数値</h3>
-
-      <table class="inputs">
-        <thead>
-          <tr><th>サービス</th><th style="text-align:right;">単価（固定）</th><th style="text-align:right;">目標数</th><th style="text-align:right;">期末月次売上</th></tr>
-        </thead>
-        <tbody>
-          <tr><td colspan="4" class="sub-header">月額サブスク</td></tr>
-          <tr>
-            <td>AIスタッフ 1名</td>
-            <td class="num unit">3万/月</td>
-            <td class="num"><input type="number" id="i-plan-single" value="3" min="0" step="1"> 社</td>
-            <td class="num" id="o-plan-single">9万</td>
-          </tr>
-          <tr>
-            <td>AIスタッフ 無制限</td>
-            <td class="num unit">5万/月</td>
-            <td class="num"><input type="number" id="i-plan-flat" value="54" min="0" step="1"> 社</td>
-            <td class="num" id="o-plan-flat">270万</td>
-          </tr>
-          <tr>
-            <td>エンタープライズ</td>
-            <td class="num unit">50万/月</td>
-            <td class="num"><input type="number" id="i-plan-ent" value="3" min="0" step="1"> 社</td>
-            <td class="num" id="o-plan-ent">150万</td>
-          </tr>
-
-          <tr><td colspan="4" class="sub-header">月次アドオン</td></tr>
-          <tr>
-            <td>API追加チャージ</td>
-            <td class="num unit">5万/回</td>
-            <td class="num"><input type="number" id="i-api-count" value="24" min="0" step="1"> 回/月</td>
-            <td class="num" id="o-api">120万</td>
-          </tr>
-          <tr>
-            <td>業務自動化スポット</td>
-            <td class="num unit">25万/件</td>
-            <td class="num"><input type="number" id="i-spot-count" value="10" min="0" step="1"> 件/月</td>
-            <td class="num" id="o-spot">250万</td>
-          </tr>
-          <tr>
-            <td>セットアップ（追加窓口）</td>
-            <td class="num unit">5万/窓口</td>
-            <td class="num"><input type="number" id="i-setup-count" value="12" min="0" step="1"> 窓口/月</td>
-            <td class="num" id="o-setup">60万</td>
-          </tr>
-
-          <tr><td colspan="4" class="sub-header">他事業（月次一定）</td></tr>
-          <tr>
-            <td>EnterWebAI 制作・保守</td>
-            <td class="num unit">—</td>
-            <td class="num"><input type="number" id="i-enter" value="14" min="0" step="1"> 万/月</td>
-            <td class="num" id="o-enter">14万</td>
-          </tr>
-          <tr>
-            <td>ClaudeWorks 案件</td>
-            <td class="num unit">—</td>
-            <td class="num"><input type="number" id="i-works" value="20" min="0" step="1"> 万/月</td>
-            <td class="num" id="o-works">20万</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-
     <!-- 組織体制 -->
     <div class="panel">
-      <div class="panel-label">Organization Inputs</div>
+      <div class="panel-label">Organization</div>
       <h3 class="panel-title">組織体制（Phase別）</h3>
 
       <div class="phase-section">
         <div class="phase-title">Phase 1 <span class="months">（4〜9月・6ヶ月）</span></div>
         <table class="inputs">
           <thead>
-            <tr><th>役職</th><th style="text-align:right;">人数</th><th style="text-align:right;">年収（万円）</th><th style="text-align:right;">年間コスト</th></tr>
+            <tr><th>役職</th><th style="text-align:right;">人数</th><th style="text-align:right;">年収（万円）</th><th style="text-align:right;">半期コスト</th></tr>
           </thead>
           <tbody id="phase1-tbody"></tbody>
         </table>
@@ -225,7 +198,7 @@
         <div class="phase-title">Phase 2 <span class="months">（10〜3月・6ヶ月）</span></div>
         <table class="inputs">
           <thead>
-            <tr><th>役職</th><th style="text-align:right;">人数</th><th style="text-align:right;">年収（万円）</th><th style="text-align:right;">年間コスト</th></tr>
+            <tr><th>役職</th><th style="text-align:right;">人数</th><th style="text-align:right;">年収（万円）</th><th style="text-align:right;">半期コスト</th></tr>
           </thead>
           <tbody id="phase2-tbody"></tbody>
         </table>
@@ -241,7 +214,7 @@
               <td class="num unit">上限50%（粗利50%ルール）</td>
             </tr>
             <tr>
-              <td>社会保険料率（法定福利費・社員給与に対して）</td>
+              <td>社会保険料率（社員給与に対して）</td>
               <td class="num"><input type="number" id="i-social-pct" value="15" min="0" max="30" step="0.5"> %</td>
               <td class="num unit">※業務委託は対象外</td>
             </tr>
@@ -258,31 +231,35 @@
           </tbody>
         </table>
       </div>
+    </div>
 
-      <div style="margin-top:20px;">
-        <div class="phase-title">年間経費（固定費）</div>
-        <table class="inputs">
-          <thead>
-            <tr><th>項目</th><th style="text-align:right;">年間（万円）</th><th>備考</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>家賃・オフィス費</td><td class="num"><input type="number" id="i-rent" value="0" min="0" step="10"></td><td class="num unit">自宅・コワーキング想定で0</td></tr>
-            <tr><td>光熱・通信費</td><td class="num"><input type="number" id="i-utility" value="60" min="0" step="5"></td><td class="num unit">電気・ガス・水道・通信</td></tr>
-            <tr><td>インフラ（AWS・ドメイン等）</td><td class="num"><input type="number" id="i-infra" value="30" min="0" step="5"></td><td class="num unit">サーバー・ドメイン</td></tr>
-            <tr><td>SaaSツール利用料</td><td class="num"><input type="number" id="i-saas" value="80" min="0" step="10"></td><td class="num unit">Notion/Slack/GitHub Copilot等</td></tr>
-            <tr><td>広告・マーケ費</td><td class="num"><input type="number" id="i-ads" value="120" min="0" step="10"></td><td class="num unit">月10万ペース</td></tr>
-            <tr><td>交際費・接待費</td><td class="num"><input type="number" id="i-entertainment" value="168" min="0" step="10"></td><td class="num unit">月14万ペース</td></tr>
-            <tr><td>交通費・出張費</td><td class="num"><input type="number" id="i-travel" value="60" min="0" step="10"></td><td class="num unit">月5万ペース</td></tr>
-            <tr><td>採用費</td><td class="num"><input type="number" id="i-hiring" value="50" min="0" step="10"></td><td class="num unit">媒体・エージェント</td></tr>
-            <tr><td>税理士・法務等外注</td><td class="num"><input type="number" id="i-outsource" value="60" min="0" step="10"></td><td class="num unit">顧問料含む</td></tr>
-            <tr><td>研修・書籍・セミナー</td><td class="num"><input type="number" id="i-training" value="30" min="0" step="5"></td><td class="num unit">社員教育・情報収集</td></tr>
-            <tr><td>支払手数料・租税公課</td><td class="num"><input type="number" id="i-fees" value="30" min="0" step="5"></td><td class="num unit">銀行・印紙・事業税等</td></tr>
-            <tr><td>保険料（賠償責任等）</td><td class="num"><input type="number" id="i-insurance" value="20" min="0" step="5"></td><td class="num unit">PL保険・業務保険</td></tr>
-            <tr><td>消耗品・事務用品</td><td class="num"><input type="number" id="i-supplies" value="20" min="0" step="5"></td><td class="num unit">文具・備品</td></tr>
-            <tr><td>その他予備費</td><td class="num"><input type="number" id="i-reserve" value="100" min="0" step="10"></td><td class="num unit">想定外支出バッファ</td></tr>
-          </tbody>
-        </table>
-      </div>
+
+    <!-- 年間経費 -->
+    <div class="panel">
+      <div class="panel-label">Fixed Expenses</div>
+      <h3 class="panel-title">年間経費（固定費）</h3>
+
+      <table class="inputs">
+        <thead>
+          <tr><th>項目</th><th style="text-align:right;">年間（万円）</th><th>備考</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>家賃・オフィス費</td><td class="num"><input type="number" id="i-rent" value="0" min="0" step="10"></td><td class="num unit">自宅・コワーキング想定で0</td></tr>
+          <tr><td>光熱・通信費</td><td class="num"><input type="number" id="i-utility" value="60" min="0" step="5"></td><td class="num unit">電気・ガス・水道・通信</td></tr>
+          <tr><td>インフラ（AWS・ドメイン等）</td><td class="num"><input type="number" id="i-infra" value="30" min="0" step="5"></td><td class="num unit">サーバー・ドメイン</td></tr>
+          <tr><td>SaaSツール利用料</td><td class="num"><input type="number" id="i-saas" value="80" min="0" step="10"></td><td class="num unit">Notion/Slack等</td></tr>
+          <tr><td>広告・マーケ費</td><td class="num"><input type="number" id="i-ads" value="120" min="0" step="10"></td><td class="num unit">月10万ペース</td></tr>
+          <tr><td>交際費・接待費</td><td class="num"><input type="number" id="i-entertainment" value="168" min="0" step="10"></td><td class="num unit">月14万ペース</td></tr>
+          <tr><td>交通費・出張費</td><td class="num"><input type="number" id="i-travel" value="60" min="0" step="10"></td><td class="num unit">月5万ペース</td></tr>
+          <tr><td>採用費</td><td class="num"><input type="number" id="i-hiring" value="50" min="0" step="10"></td><td class="num unit">媒体・エージェント</td></tr>
+          <tr><td>税理士・法務等外注</td><td class="num"><input type="number" id="i-outsource" value="60" min="0" step="10"></td><td class="num unit">顧問料含む</td></tr>
+          <tr><td>研修・書籍・セミナー</td><td class="num"><input type="number" id="i-training" value="30" min="0" step="5"></td><td class="num unit">社員教育</td></tr>
+          <tr><td>支払手数料・租税公課</td><td class="num"><input type="number" id="i-fees" value="30" min="0" step="5"></td><td class="num unit">銀行・印紙・事業税等</td></tr>
+          <tr><td>保険料（賠償責任等）</td><td class="num"><input type="number" id="i-insurance" value="20" min="0" step="5"></td><td class="num unit">PL保険等</td></tr>
+          <tr><td>消耗品・事務用品</td><td class="num"><input type="number" id="i-supplies" value="20" min="0" step="5"></td><td class="num unit">文具・備品</td></tr>
+          <tr><td>その他予備費</td><td class="num"><input type="number" id="i-reserve" value="100" min="0" step="10"></td><td class="num unit">想定外バッファ</td></tr>
+        </tbody>
+      </table>
     </div>
 
   </div>
@@ -291,7 +268,7 @@
 
 <!-- 試算内訳 -->
 <section class="section">
-  <div class="section-num">02</div>
+  <div class="section-num">03</div>
   <h2 class="section-title">試算内訳</h2>
   <div class="section-sub">Calculation Breakdown</div>
   <hr class="section-hr">
@@ -313,23 +290,15 @@
       </table>
     </div>
   </div>
-
-  <div class="callout warn">
-    <strong>試算ロジック：</strong>MRR・アドオンはMonth 1〜12で linear ramp（期末値まで段階的に到達）を想定し、通期売上＝期末月次売上×6ヶ月相当として計算しています。他事業は月次一定×11ヶ月。API原価はMRRに対して指定%を適用。社会保険は社員（業務委託除く）の給与×社会保険料率。固定費は年間額を直接計上。Unseeフィーは MRR×比率、借入返済は年間固定。
-  </div>
 </section>
 
 
-<!-- 参考情報 -->
+<!-- Phase移行ゲート -->
 <section class="section">
-  <div class="section-num">03</div>
+  <div class="section-num">04</div>
   <h2 class="section-title">段階スケーリング・Phase移行ゲート</h2>
   <div class="section-sub">Phase Gates</div>
   <hr class="section-hr">
-
-  <p>
-    組織体制は「契約社数 × スポット受注量」の実績に応じて段階的に拡張する。以下は推奨のPhase移行ゲート条件。
-  </p>
 
   <table class="inputs">
     <thead>
@@ -344,9 +313,8 @@
 </section>
 
 
-<!-- リスクと対応 -->
 <section class="section">
-  <div class="section-num">04</div>
+  <div class="section-num">05</div>
   <h2 class="section-title">リスクと対応ルール</h2>
   <div class="section-sub">Risk &amp; Response</div>
   <hr class="section-hr">
@@ -355,8 +323,6 @@
     <li><strong>契約社数伸び悩み</strong> ─ 月次純増5社未達が2ヶ月続いた時点で Phase 1.5 移行を保留、ドッグフーディング素材の社外発信を強化</li>
     <li><strong>スポット受注不足</strong> ─ 基準月10本に対して5本未満なら、既存顧客への活用提案を V/AIBOU 自走プッシュに切り替え</li>
     <li><strong>API原価 粗利50%ルール逸脱</strong> ─ 月次で粗利率監視、50%逸脱時は該当顧客のプランアップ提案 or 利用制限</li>
-    <li><strong>API追加購入鈍化</strong> ─ 活用ガイド週次配信と90日オンボサイクルで定着促進、効果ない場合はプラン再設計</li>
-    <li><strong>セットアップ料の受注鈍化</strong> ─ 1人運用0円訴求は維持、追加窓口提案のキャンペーン化</li>
     <li><strong>最低キャッシュ500万割れ</strong> ─ 採用凍結・外注費圧縮を即発動、ランウェイ6ヶ月確保を最優先</li>
     <li><strong>絶対に守ること</strong> ─ CEO・CTOの報酬は最後まで削らない／Phase 3 に早期拡張しない</li>
   </ul>
@@ -374,6 +340,55 @@
 
 <script>
 (function(){
+  const MONTHS = ['4月','5月','6月','7月','8月','9月','10月','11月','12月','1月','2月','3月'];
+  const MONTH_KEYS = ['m1','m2','m3','m4','m5','m6','m7','m8','m9','m10','m11','m12'];
+
+  // Revenue services (contracts are stock; addons/other are flow)
+  const services = [
+    { key: 'plan_single', name: 'AIスタッフ 1名',       unit: 3,  type: 'stock', label: '社' },
+    { key: 'plan_flat',   name: 'AIスタッフ 無制限',    unit: 5,  type: 'stock', label: '社' },
+    { key: 'plan_ent',    name: 'エンタープライズ',     unit: 50, type: 'stock', label: '社' },
+    { key: 'api',         name: 'API追加チャージ',      unit: 5,  type: 'flow',  label: '回' },
+    { key: 'spot',        name: '業務自動化スポット',   unit: 25, type: 'flow',  label: '件' },
+    { key: 'setup',       name: 'セットアップ（追加窓口）', unit: 5, type: 'flow', label: '窓口' },
+    { key: 'enter',       name: 'EnterWebAI 制作・保守', unit: 1,  type: 'yen',   label: '万' },
+    { key: 'works',       name: 'ClaudeWorks 案件',     unit: 1,  type: 'yen',   label: '万' }
+  ];
+
+  // Revenue monthly presets (12 months: 4月〜3月)
+  const revPresets = {
+    worst: {
+      plan_single: [0,0,0,1,1,1,2,2,2,2,3,3],
+      plan_flat:   [0,1,2,4,7,12,17,22,27,32,37,44],
+      plan_ent:    [0,0,0,0,0,0,1,1,1,2,2,3],
+      api:         [0,0,0,1,2,3,5,6,7,8,9,10],
+      spot:        [0,0,0,1,1,1,2,2,2,3,3,3],
+      setup:       [0,0,1,2,3,4,5,5,6,6,7,8],
+      enter:       [0,5,10,10,10,10,10,10,10,10,10,10],
+      works:       [0,4,8,12,15,15,15,15,15,15,15,15]
+    },
+    base: {
+      plan_single: [0,0,1,1,2,2,2,3,3,3,3,3],
+      plan_flat:   [0,2,4,9,15,23,30,35,42,48,53,54],
+      plan_ent:    [0,0,0,0,0,0,1,1,1,2,2,3],
+      api:         [0,0,1,3,5,8,12,14,17,20,22,24],
+      spot:        [0,0,1,2,3,4,6,7,8,9,9,10],
+      setup:       [0,1,2,3,5,7,8,8,9,10,11,12],
+      enter:       [0,7,14,14,14,14,14,14,14,14,14,14],
+      works:       [0,5,10,15,20,20,20,20,20,20,20,20]
+    },
+    best: {
+      plan_single: [0,0,1,1,2,2,2,3,3,3,3,3],
+      plan_flat:   [0,3,6,12,20,30,40,48,57,63,68,72],
+      plan_ent:    [0,0,0,0,1,1,2,3,3,4,4,5],
+      api:         [0,0,2,5,9,14,20,25,30,35,38,40],
+      spot:        [0,0,1,3,5,7,9,10,11,12,13,13],
+      setup:       [0,1,2,4,6,8,10,12,13,14,15,16],
+      enter:       [0,10,15,20,20,20,20,20,20,20,20,20],
+      works:       [0,5,10,15,20,25,25,25,25,25,25,25]
+    }
+  };
+
   const roles = [
     { key: 'ceo', name: 'CEO橋本', p1c: 1, p1s: 0, p2c: 1, p2s: 0 },
     { key: 'cto', name: 'CTO櫻井', p1c: 1, p1s: 1000, p2c: 1, p2s: 1000 },
@@ -385,11 +400,8 @@
     { key: 'backoffice', name: 'バックオフィス（パート）', p1c: 0.3, p1s: 200, p2c: 0.3, p2s: 200 }
   ];
 
-  const presets = {
+  const costPresets = {
     worst: {
-      plan_single: 3, plan_flat: 44, plan_ent: 3,
-      api_count: 10, spot_count: 3.5, setup_count: 8,
-      enter: 10, works: 15,
       api_cost_pct: 40, social_pct: 15, unsee_pct: 3, loan: 99,
       rent: 0, utility: 40, infra: 24, saas: 60, ads: 60, entertainment: 120, travel: 40,
       hiring: 20, outsource: 60, training: 20, fees: 24, insurance: 12, supplies: 12, reserve: 60,
@@ -397,9 +409,6 @@
       phase2: { ceo:[1,0], cto:[1,1000], eng_sr:[0,900], eng_mid:[1,720], cs:[1,550], sales:[0,500], marketing:[0,450], backoffice:[0.3,200] }
     },
     base: {
-      plan_single: 3, plan_flat: 54, plan_ent: 3,
-      api_count: 24, spot_count: 10, setup_count: 12,
-      enter: 14, works: 20,
       api_cost_pct: 40, social_pct: 15, unsee_pct: 3, loan: 99,
       rent: 0, utility: 60, infra: 30, saas: 80, ads: 120, entertainment: 168, travel: 60,
       hiring: 50, outsource: 60, training: 30, fees: 30, insurance: 20, supplies: 20, reserve: 100,
@@ -407,9 +416,6 @@
       phase2: { ceo:[1,0], cto:[1,1000], eng_sr:[1,900], eng_mid:[2,720], cs:[1,550], sales:[0,500], marketing:[0,450], backoffice:[0.3,200] }
     },
     best: {
-      plan_single: 3, plan_flat: 72, plan_ent: 5,
-      api_count: 40, spot_count: 13, setup_count: 16,
-      enter: 20, works: 25,
       api_cost_pct: 38, social_pct: 15, unsee_pct: 3, loan: 99,
       rent: 0, utility: 80, infra: 60, saas: 120, ads: 240, entertainment: 240, travel: 100,
       hiring: 100, outsource: 80, training: 50, fees: 40, insurance: 30, supplies: 30, reserve: 150,
@@ -418,10 +424,48 @@
     }
   };
 
-  const PRICE = { plan_single: 3, plan_flat: 5, plan_ent: 50, api: 5, spot: 25, setup: 5 };
   const OPEN_CASH = 1125;
   let _applying = false;
 
+  // Render revenue monthly matrix
+  function renderRevMatrix(){
+    const tbody = document.getElementById('rev-matrix');
+    if(!tbody) return;
+    tbody.innerHTML = '';
+
+    const sections = [
+      { title: '月額サブスク（期末時点の契約社数を累計で入力）', filter: s => s.key.startsWith('plan_') },
+      { title: '月次アドオン（その月の件数を入力）', filter: s => ['api','spot','setup'].indexOf(s.key) >= 0 },
+      { title: '他事業（月次売上を万円で入力）', filter: s => ['enter','works'].indexOf(s.key) >= 0 }
+    ];
+
+    sections.forEach(sec => {
+      tbody.insertAdjacentHTML('beforeend',
+        '<tr class="section-row"><td colspan="14">' + sec.title + '</td></tr>'
+      );
+      services.filter(sec.filter).forEach(s => {
+        let row = '<tr>';
+        const unitText = s.type === 'yen' ? '(そのまま万円)' : s.unit + '万/' + s.label;
+        row += '<td class="service">' + s.name + '<br><span class="unit-cell">' + unitText + '</span></td>';
+        for(let i = 0; i < 12; i++){
+          row += '<td><input type="number" id="i-' + s.key + '-m' + (i+1) + '" value="0" min="0" step="1"></td>';
+        }
+        row += '<td class="annual" id="o-annual-' + s.key + '">—</td>';
+        row += '</tr>';
+        tbody.insertAdjacentHTML('beforeend', row);
+      });
+    });
+
+    // Total row (monthly revenue in 万)
+    let totalRow = '<tr class="total-row"><td class="service" style="color:#fff;">月次売上合計</td>';
+    for(let i = 0; i < 12; i++){
+      totalRow += '<td id="o-monthly-' + (i+1) + '">—</td>';
+    }
+    totalRow += '<td class="annual" id="o-annual-total" style="color:#fff;background:#333;">—</td></tr>';
+    tbody.insertAdjacentHTML('beforeend', totalRow);
+  }
+
+  // Render org tables
   function renderOrgTables(){
     const p1 = document.getElementById('phase1-tbody');
     const p2 = document.getElementById('phase2-tbody');
@@ -444,34 +488,45 @@
     });
     p1.insertAdjacentHTML('beforeend',
       '<tr style="background:#fafafa;border-top:2px solid #0a0a0a;font-weight:700;">' +
-      '<td colspan="3" style="font-family:Inter,sans-serif;font-size:11px;letter-spacing:.15em;text-transform:uppercase;">Phase 1 半期コスト（6ヶ月）</td>' +
+      '<td colspan="3" style="font-family:Inter,sans-serif;font-size:11px;letter-spacing:.15em;text-transform:uppercase;">Phase 1 半期コスト</td>' +
       '<td class="num" id="o-p1-sum">—</td></tr>'
     );
     p2.insertAdjacentHTML('beforeend',
       '<tr style="background:#fafafa;border-top:2px solid #0a0a0a;font-weight:700;">' +
-      '<td colspan="3" style="font-family:Inter,sans-serif;font-size:11px;letter-spacing:.15em;text-transform:uppercase;">Phase 2 半期コスト（6ヶ月）</td>' +
+      '<td colspan="3" style="font-family:Inter,sans-serif;font-size:11px;letter-spacing:.15em;text-transform:uppercase;">Phase 2 半期コスト</td>' +
       '<td class="num" id="o-p2-sum">—</td></tr>'
     );
   }
 
   function applyPreset(name){
-    const p = presets[name];
-    if(!p) return;
+    const rev = revPresets[name];
+    const cost = costPresets[name];
+    if(!rev || !cost) return;
     _applying = true;
-    ['plan_single','plan_flat','plan_ent','api_count','spot_count','setup_count','enter','works',
-     'api_cost_pct','social_pct','unsee_pct','loan',
+
+    // Revenue monthly values
+    services.forEach(s => {
+      for(let i = 0; i < 12; i++){
+        const el = document.getElementById('i-' + s.key + '-m' + (i+1));
+        if(el) el.value = rev[s.key][i];
+      }
+    });
+
+    // Cost inputs
+    ['api_cost_pct','social_pct','unsee_pct','loan',
      'rent','utility','infra','saas','ads','entertainment','travel','hiring','outsource','training','fees','insurance','supplies','reserve'
     ].forEach(k => {
       const el = document.getElementById('i-' + k.replace(/_/g,'-'));
-      if(el) el.value = p[k];
+      if(el) el.value = cost[k];
     });
     roles.forEach(r => {
       var e;
-      e = document.getElementById('i-p1c-'+r.key); if(e) e.value = p.phase1[r.key][0];
-      e = document.getElementById('i-p1s-'+r.key); if(e) e.value = p.phase1[r.key][1];
-      e = document.getElementById('i-p2c-'+r.key); if(e) e.value = p.phase2[r.key][0];
-      e = document.getElementById('i-p2s-'+r.key); if(e) e.value = p.phase2[r.key][1];
+      e = document.getElementById('i-p1c-'+r.key); if(e) e.value = cost.phase1[r.key][0];
+      e = document.getElementById('i-p1s-'+r.key); if(e) e.value = cost.phase1[r.key][1];
+      e = document.getElementById('i-p2c-'+r.key); if(e) e.value = cost.phase2[r.key][0];
+      e = document.getElementById('i-p2s-'+r.key); if(e) e.value = cost.phase2[r.key][1];
     });
+
     document.querySelectorAll('[data-preset]').forEach(b => b.classList.remove('active'));
     const btn = document.querySelector('[data-preset="'+name+'"]');
     if(btn) btn.classList.add('active');
@@ -496,44 +551,61 @@
   }
 
   function flashKpi(){
-    const kpis = document.querySelectorAll('.kpi');
-    kpis.forEach(k => {
+    document.querySelectorAll('.kpi').forEach(k => {
       k.classList.add('flash');
       setTimeout(() => k.classList.remove('flash'), 200);
     });
   }
 
   function calc(){
-    const ps = v('i-plan-single');
-    const pf = v('i-plan-flat');
-    const pe = v('i-plan-ent');
-    const api = v('i-api-count');
-    const spot = v('i-spot-count');
-    const setup = v('i-setup-count');
-    const enter = v('i-enter');
-    const works = v('i-works');
-
-    const mrr_end = ps * PRICE.plan_single + pf * PRICE.plan_flat + pe * PRICE.plan_ent;
-    const addon_end = api * PRICE.api + spot * PRICE.spot + setup * PRICE.setup;
-    const other_end = enter + works;
-    const monthly_end = mrr_end + addon_end + other_end;
-
     const setText = (id, txt) => { const el = document.getElementById(id); if(el) el.textContent = txt; };
 
-    setText('o-plan-single', fm(ps * PRICE.plan_single));
-    setText('o-plan-flat', fm(pf * PRICE.plan_flat));
-    setText('o-plan-ent', fm(pe * PRICE.plan_ent));
-    setText('o-api', fm(api * PRICE.api));
-    setText('o-spot', fm(spot * PRICE.spot));
-    setText('o-setup', fm(setup * PRICE.setup));
-    setText('o-enter', fm(enter));
-    setText('o-works', fm(works));
+    // Compute monthly revenue per service
+    const monthlyRev = Array(12).fill(0); // 月別合計売上 (万円)
+    let mrr_end = 0; // 期末 MRR 部分
+    let addon_end = 0;
+    let other_end = 0;
 
-    const annual_mrr = mrr_end * 6;
-    const annual_addon = addon_end * 6;
-    const annual_other = other_end * 11;
-    const annual_rev = annual_mrr + annual_addon + annual_other;
+    services.forEach(s => {
+      let serviceAnnual = 0;
+      for(let i = 0; i < 12; i++){
+        const count = v('i-' + s.key + '-m' + (i+1));
+        const revThisMonth = s.type === 'yen' ? count : count * s.unit;
+        monthlyRev[i] += revThisMonth;
+        serviceAnnual += revThisMonth;
+      }
+      setText('o-annual-' + s.key, fm(serviceAnnual));
+    });
 
+    // Display monthly totals
+    for(let i = 0; i < 12; i++){
+      setText('o-monthly-' + (i+1), fm(monthlyRev[i]));
+    }
+
+    const annual_rev = monthlyRev.reduce((a,b) => a+b, 0);
+    setText('o-annual-total', fm(annual_rev));
+
+    // 期末月次売上 (month 12 = 3月)
+    const monthly_end = monthlyRev[11];
+
+    // Recompute mrr_end / addon_end / other_end for display
+    services.forEach(s => {
+      const endCount = v('i-' + s.key + '-m12');
+      const endRev = s.type === 'yen' ? endCount : endCount * s.unit;
+      if(s.key.startsWith('plan_')) mrr_end += endRev;
+      else if(['api','spot','setup'].indexOf(s.key) >= 0) addon_end += endRev;
+      else other_end += endRev;
+    });
+
+    // Annual MRR (sum of stock services over 12 months)
+    let annual_mrr = 0;
+    services.filter(s => s.key.startsWith('plan_')).forEach(s => {
+      for(let i = 0; i < 12; i++){
+        annual_mrr += v('i-' + s.key + '-m' + (i+1)) * s.unit;
+      }
+    });
+
+    // Org costs
     let p1_sum = 0, p2_sum = 0;
     let p1_employee = 0, p2_employee = 0;
     roles.forEach(r => {
@@ -573,6 +645,7 @@
     const annual_pl = annual_rev - annual_cost;
     const end_cash = OPEN_CASH + annual_pl;
 
+    // KPI
     setText('r-monthly-end', fm(monthly_end));
     setText('r-monthly-end-note', 'MRR ' + fm(mrr_end) + ' + アドオン ' + fm(addon_end) + ' + 他 ' + fm(other_end));
     setText('r-annual-rev', fm(annual_rev));
@@ -585,12 +658,12 @@
     setText('r-annual-pl-note', annual_pl >= 0 ? '黒字' : '赤字');
     setText('r-end-cash', fm(end_cash));
 
+    // Breakdown
     const revEl = document.getElementById('rev-breakdown');
     if(revEl){
       revEl.innerHTML =
-        '<tr><td>月額 MRR（期末 ' + fm(mrr_end) + '/月 × 6）</td><td class="num">' + fm(annual_mrr) + '</td></tr>' +
-        '<tr><td>アドオン（期末 ' + fm(addon_end) + '/月 × 6）</td><td class="num">' + fm(annual_addon) + '</td></tr>' +
-        '<tr><td>他事業（月' + fm(other_end) + ' × 11）</td><td class="num">' + fm(annual_other) + '</td></tr>' +
+        '<tr><td>月額 MRR（年間累計）</td><td class="num">' + fm(annual_mrr) + '</td></tr>' +
+        '<tr><td>アドオン＋他事業</td><td class="num">' + fm(annual_rev - annual_mrr) + '</td></tr>' +
         '<tr style="background:#fafafa;border-top:2px solid #0a0a0a;font-weight:700;"><td>通期売上</td><td class="num">' + fm(annual_rev) + '</td></tr>';
     }
 
@@ -609,9 +682,7 @@
 
     const now = new Date();
     const pad = (n) => String(n).padStart(2,'0');
-    const t = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
-    setText('last-update', 'recalculated ' + t);
-
+    setText('last-update', 'recalculated ' + pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds()));
     flashKpi();
   }
 
@@ -635,6 +706,7 @@
   }
 
   function init(){
+    renderRevMatrix();
     renderOrgTables();
     bindEvents();
     applyPreset('base');
