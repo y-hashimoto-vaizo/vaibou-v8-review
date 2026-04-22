@@ -686,11 +686,49 @@
     flashKpi();
   }
 
+  // localStorage persistence — URLごとに別キー
+  const STORAGE_KEY = 'vaibou_budget_' + (location.pathname || 'default') + '_v1';
+  const PRESET_KEY  = STORAGE_KEY + '_preset';
+
+  function saveState(){
+    try {
+      const data = {};
+      document.querySelectorAll('input[type=number]').forEach(el => {
+        if(el.id) data[el.id] = el.value;
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch(e){}
+  }
+
+  function loadState(){
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return false;
+      const data = JSON.parse(raw);
+      let restored = 0;
+      Object.keys(data).forEach(id => {
+        const el = document.getElementById(id);
+        if(el){ el.value = data[id]; restored++; }
+      });
+      return restored > 0;
+    } catch(e){ return false; }
+  }
+
+  function clearState(){
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(PRESET_KEY);
+    } catch(e){}
+  }
+
   function bindEvents(){
     document.querySelectorAll('[data-preset]').forEach(b => {
       b.addEventListener('click', () => {
         const p = b.getAttribute('data-preset');
-        if(p !== 'custom') applyPreset(p);
+        if(p === 'custom') return;
+        applyPreset(p);
+        try { localStorage.setItem(PRESET_KEY, p); } catch(e){}
+        saveState();
       });
     });
     document.addEventListener('input', (e) => {
@@ -699,17 +737,51 @@
           document.querySelectorAll('[data-preset]').forEach(b => b.classList.remove('active'));
           const c = document.querySelector('[data-preset="custom"]');
           if(c) c.classList.add('active');
+          try { localStorage.setItem(PRESET_KEY, 'custom'); } catch(e){}
         }
         calc();
+        saveState();
       }
     });
+    // Clear button (dynamically added)
+    const bar = document.querySelector('.preset-bar');
+    if(bar && !document.getElementById('btn-clear')){
+      const btn = document.createElement('button');
+      btn.className = 'btn';
+      btn.id = 'btn-clear';
+      btn.textContent = '入力クリア';
+      btn.style.opacity = '.7';
+      btn.addEventListener('click', () => {
+        if(!confirm('入力値を全てクリアして基準ケースに戻します。よろしいですか？')) return;
+        clearState();
+        applyPreset('base');
+        saveState();
+      });
+      // Insert before the last update span
+      const lastUpd = document.getElementById('last-update');
+      if(lastUpd) bar.insertBefore(btn, lastUpd);
+      else bar.appendChild(btn);
+    }
   }
 
   function init(){
     renderRevMatrix();
     renderOrgTables();
     bindEvents();
-    applyPreset('base');
+    // Try to restore saved state first; otherwise apply base preset
+    const restored = loadState();
+    if(restored){
+      // Mark custom or saved preset button
+      let savedPreset = 'custom';
+      try { savedPreset = localStorage.getItem(PRESET_KEY) || 'custom'; } catch(e){}
+      document.querySelectorAll('[data-preset]').forEach(b => b.classList.remove('active'));
+      const btn = document.querySelector('[data-preset="'+savedPreset+'"]');
+      if(btn) btn.classList.add('active');
+      calc();
+    } else {
+      applyPreset('base');
+      saveState();
+    }
   }
 
   if(document.readyState === 'loading'){
